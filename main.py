@@ -75,7 +75,7 @@ if uploaded_file is not None:
             fp.write_bytes(uploaded_file.getvalue())
             st.write(show_pdf(tmp_file.name))
 
-            imgs = convert_from_path(tmp_file.name)
+            imgs = convert_from_path(tmp_file.name,500, poppler_path=r'documentQuestionAnswering-main/poppler/bin')
 
             st.markdown(f"Converted images from PDF")
             st.image(imgs)
