@@ -1,3 +1,4 @@
+import PyPDF2
 import streamlit as st
 import pandas as pd
 from functionforDownloadButtons import download_button
