@@ -4,4 +4,4 @@ transformers
 pdf2image
 torch
 pytesseract
-tesseract 
+tesseract

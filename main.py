@@ -3,6 +3,7 @@ import streamlit as st
 from transformers import pipeline
 from functionforDownloadButtons import download_button
 from PIL import Image
+import pytesseract
 
 
 
@@ -38,39 +39,39 @@ with c2:
 
 images_ = st.file_uploader("Upload PDF", type=["png","jpg","jpeg"], accept_multiple_files=True)
 # Convert PDF to JPG
-image = Image.open(images_)
-Image_list = []
-if images_ is not None:
-    st.write(images_)
-    for i in range(len(images_)):
-        Image_list.append(images_[i].name)
-
-else:
-    st.info(
-        f"""
-            👆 Upload a .csv file first. Sample to try: [biostats.csv](https://people.sc.fsu.edu/~jburkardt/data/csv/biostats.csv)
-            """
-    )
-
-    st.stop()
-
-
 
 df = pd.DataFrame(columns=['Image', 'Answer'])
-def pdf_checker(question_):
+def image_checker(question_):
     nlp = pipeline(
         "document-question-answering",
         model="impira/layoutlm-document-qa",
     )
-    for image in Image_list:
-        result = nlp(
-            image,
-            question_
+    if images_ is not None:
+        for image in images_:
+            image_opened = Image.open(image)
+            result = nlp(
+                image_opened,
+                question_
+            )
+            new_row = {'Image': image, 'Answer': result}
+            df = df.append(new_row, ignore_index=True)
+    else:
+        st.info(
+            f"""
+                👆 Upload a .csv file first. Sample to try: [biostats.csv](https://people.sc.fsu.edu/~jburkardt/data/csv/biostats.csv)
+                """
         )
-        new_row = {'Image': image, 'Answer': result}
-        df = df.append(new_row, ignore_index=True)
+
+        st.stop()
 
     return (df)
+
+import os
+
+filenames = os.listdir('.Tesseract-OCR')
+selected_filename = st.selectbox('Select a file', filenames)
+
+#pytesseract.pytesseract.tesseract_cmd = r"D:\Program Files (x86)\Tesseract-OCR\tesseract.exe"
 
 form = st.form(key="annotation")
 with form:
@@ -81,7 +82,7 @@ with form:
 
 if submitted:
 
-    answer = pdf_checker(question_)
+    answer = image_checker(question_)
 
 
 c29, c30, c31 = st.columns([1, 1, 2])
