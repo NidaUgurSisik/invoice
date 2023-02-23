@@ -1,15 +1,9 @@
-import streamlit as st
 import pandas as pd
-from functionforDownloadButtons import download_button
-from pdf2image import convert_from_bytes
-import pytesseract
-
+import streamlit as st
 from transformers import pipeline
-from pdf2image.exceptions import (
-    PDFInfoNotInstalledError,
-    PDFPageCountError,
-    PDFSyntaxError
-)
+from functionforDownloadButtons import download_button
+from PIL import Image
+
 
 
 def _max_width_():
@@ -42,12 +36,14 @@ with c2:
             width=200,
         )
 
-uploaded_file = st.file_uploader('Choose your .pdf file', type="pdf")
-
-if uploaded_file is not None:
-    image_ = convert_from_bytes(uploaded_file.read(), 500, poppler_path='poppler/')
-    image_[0].save('page' + '.jpg', 'JPEG')
-    uploaded_file.seek(0)
+images_ = st.file_uploader("Upload PDF", type=["png","jpg","jpeg"], accept_multiple_files=True)
+# Convert PDF to JPG
+image = Image.open(images_)
+Image_list = []
+if images_ is not None:
+    st.write(images_)
+    for i in range(len(images_)):
+        Image_list.append(images_[i].name)
 
 else:
     st.info(
@@ -58,21 +54,27 @@ else:
 
     st.stop()
 
+
+
+df = pd.DataFrame(columns=['Image', 'Answer'])
 def pdf_checker(question_):
     nlp = pipeline(
         "document-question-answering",
         model="impira/layoutlm-document-qa",
     )
+    for image in Image_list:
+        result = nlp(
+            image,
+            question_
+        )
+        new_row = {'Image': image, 'Answer': result}
+        df = df.append(new_row, ignore_index=True)
 
-    result = nlp(
-        "page.jpg",
-        question_
-    )
-    return (result)
+    return (df)
 
 form = st.form(key="annotation")
 with form:
-    question_ = st.text_input()
+    question_ = st.text_input("Enter your query!")
 
     submitted = st.form_submit_button(label="Submit")
 
@@ -85,4 +87,9 @@ if submitted:
 c29, c30, c31 = st.columns([1, 1, 2])
 
 with c29:
-    st.write(answer)
+
+    CSVButton = download_button(
+        df,
+        "FlaggedFile.csv",
+        "Download to CSV",
+    )
