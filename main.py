@@ -42,11 +42,7 @@ with c2:
             width=200,
         )
 
-uploaded_file = st.file_uploader(
-    " ",
-    key="1",
-    help="To activate 'wide mode', go to the hamburger menu > Settings > turn on 'wide mode'",
-)
+uploaded_file = st.file_uploader('Choose your .pdf file', type="pdf")
 
 if uploaded_file is not None:
     image_ = convert_from_path(uploaded_file)
