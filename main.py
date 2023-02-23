@@ -1,3 +1,4 @@
+import tempfile
 from PIL import Image
 import PyPDF2
 import streamlit as st
@@ -6,7 +7,10 @@ from functionforDownloadButtons import download_button
 from pdf2image import convert_from_path
 import pytesseract
 from PyPDF2 import PdfFileReader, PdfFileWriter
+import base64
+import tempfile
 
+from pathlib import Path
 from transformers import pipeline
 from pdf2image.exceptions import (
     PDFInfoNotInstalledError,
@@ -45,13 +49,37 @@ with c2:
             width=200,
         )
 
-pdf_file = st.file_uploader("Upload PDF", type="pdf")
+
+def show_pdf(file_path:str):
+    """Show the PDF in Streamlit
+    That returns as html component
+
+    Parameters
+    ----------
+    file_path : [str]
+        Uploaded PDF file path
+    """
+
+    with open(file_path, "rb") as f:
+        base64_pdf = base64.b64encode(f.read()).decode("utf-8")
+    pdf_display = f'<embed src="data:application/pdf;base64,{base64_pdf}" width="100%" height="1000" type="application/pdf">'
+    st.markdown(pdf_display, unsafe_allow_html=True)
+
+uploaded_file = st.file_uploader("Upload PDF", type="pdf")
 
 # Convert PDF to JPG
-if pdf_file is not None:
-    image_ = convert_from_path(pdf_file.path,500)
-    image_[0].save('page' + '.jpg', 'JPEG')
-    pdf_file.seek(0)
+if uploaded_file is not None:
+        # Make temp file path from uploaded file
+        with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
+            st.markdown("## Original PDF file")
+            fp = Path(tmp_file.name)
+            fp.write_bytes(uploaded_file.getvalue())
+            st.write(show_pdf(tmp_file.name))
+
+            imgs = convert_from_path(tmp_file.name)
+
+            st.markdown(f"Converted images from PDF")
+            st.image(imgs)
 
 
 else:
