@@ -9,7 +9,6 @@ import pytesseract
 from PyPDF2 import PdfFileReader, PdfFileWriter
 import base64
 import tempfile
-
 from pathlib import Path
 from transformers import pipeline
 from pdf2image.exceptions import (
