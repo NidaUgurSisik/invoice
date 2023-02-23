@@ -45,11 +45,22 @@ with c2:
 uploaded_file = st.file_uploader('Choose your .pdf file', type="pdf")
 
 if uploaded_file is not None:
-    outputpath = r""
-    result_img = pdf2jpg.convert_pdf2jpg(uploaded_file,outputpath, pages="ALL")
-    #result.save('page' + '.jpg', 'JPEG')
-    print(result_img)
-    uploaded_file.seek(0)
+    import pypdfium2 as pdfium
+
+    pdf = pdfium.PdfDocument(uploaded_file)
+    n_pages = len(pdf)
+    for page_number in range(n_pages):
+        page = pdf.get_page(page_number)
+        pil_image = page.render_topil(
+            scale=1,
+            rotation=0,
+            crop=(0, 0, 0, 0),
+            colour=(255, 255, 255, 255),
+            annotations=True,
+            greyscale=False,
+            optimise_mode=pdfium.OptimiseMode.NONE,
+        )
+        x = pil_image.save(f"image_{page_number+1}.png")
 
 else:
     st.info(
@@ -67,7 +78,7 @@ def pdf_checker(question_):
     )
 
     result = nlp(
-        outputpath,
+        x,
         question_
     )
     return (result)
