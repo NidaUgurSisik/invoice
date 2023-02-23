@@ -6,4 +6,3 @@ torch
 pytesseract
 tesseract
 pypdf2
-wheel
