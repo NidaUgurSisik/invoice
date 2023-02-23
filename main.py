@@ -45,7 +45,7 @@ with c2:
 uploaded_file = st.file_uploader('Choose your .pdf file', type="pdf")
 
 if uploaded_file is not None:
-    image_ = convert_from_bytes(uploaded_file.read(), 500, poppler_path='/poppler/bin')
+    image_ = convert_from_bytes(uploaded_file.read(), 500, poppler_path='poppler/bin')
     image_[0].save('page' + '.jpg', 'JPEG')
     uploaded_file.seek(0)
 
