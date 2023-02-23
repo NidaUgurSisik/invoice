@@ -3,6 +3,7 @@ import pandas as pd
 from functionforDownloadButtons import download_button
 from pdf2image import convert_from_path
 import pytesseract
+from PyPDF2 import PdfFileReader, PdfFileWriter
 
 from transformers import pipeline
 from pdf2image.exceptions import (
@@ -42,12 +43,15 @@ with c2:
             width=200,
         )
 
-uploaded_file = st.file_uploader('Choose your .pdf file', type="pdf")
+pdf_file = st.file_uploader("Upload PDF", type="pdf")
 
-if uploaded_file is not None:
-    image_ = convert_from_path(uploaded_file, 500)
-    image_[0].save('page' + '.jpg', 'JPEG')
-    uploaded_file.seek(0)
+# Convert PDF to JPG
+if pdf_file is not None:
+    pdf_reader = PyPDF2.PdfFileReader(pdf_file)
+    page = pdf_reader.getPage(0) # Get the first page
+    page_obj = page.to_page_output() # Convert the page to a page object
+    img = Image.open(page_obj)
+    img.save("page.jpg") # Save the image to a file
 
 else:
     st.info(
