@@ -48,7 +48,7 @@ pdf_file = st.file_uploader("Upload PDF", type="pdf")
 
 # Convert PDF to JPG
 if pdf_file is not None:
-    pdf_reader = PyPDF2.PdfFileReader(pdf_file)
+    pdf_reader = PyPDF2.PdfReader(pdf_file)
     page = pdf_reader.getPage(0) # Get the first page
     page_obj = page.to_page_output() # Convert the page to a page object
     img = Image.open(page_obj)
