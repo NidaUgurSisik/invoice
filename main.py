@@ -46,8 +46,8 @@ uploaded_file = st.file_uploader('Choose your .pdf file', type="pdf")
 
 if uploaded_file is not None:
     outputpath = r""
-    result = pdf2jpg.convert_pdf2jpg(uploaded_file,outputpath, pages="ALL")
-    result.save('page' + '.jpg', 'JPEG')
+    result_img = pdf2jpg.convert_pdf2jpg(uploaded_file,outputpath, pages="ALL")
+    #result.save('page' + '.jpg', 'JPEG')
     uploaded_file.seek(0)
 
 else:
@@ -66,7 +66,7 @@ def pdf_checker(question_):
     )
 
     result = nlp(
-        "page.jpg",
+        result_img,
         question_
     )
     return (result)
