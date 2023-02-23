@@ -41,9 +41,6 @@ with c2:
             "images/logo.png",
             width=200,
         )
-
-uploaded_file = st.file_uploader('Choose your .pdf file', type="pdf")
-
 uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
 
 if uploaded_file is not None:
