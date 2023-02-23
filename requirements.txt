@@ -6,4 +6,4 @@ torch
 pytesseract
 tesseract
 pypdf2
-poppler
+python-poppler
