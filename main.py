@@ -45,7 +45,7 @@ with c2:
 uploaded_file = st.file_uploader('Choose your .pdf file', type="pdf")
 
 if uploaded_file is not None:
-    images = pdf2image.convert_from_bytes(imagem_referencia.read())
+    images = pdf2image.convert_from_bytes(uploaded_file.read())
     for page in images:
             st.image(page, use_column_width=True)
     uploaded_file.seek(0)
