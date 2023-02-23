@@ -49,7 +49,7 @@ pdf_file = st.file_uploader("Upload PDF", type="pdf")
 
 # Convert PDF to JPG
 if pdf_file is not None:
-    image_ = convert_from_path(pdf_file)
+    image_ = convert_from_path(pdf_file,500)
     image_[0].save('page' + '.jpg', 'JPEG')
     pdf_file.seek(0)
 
