@@ -64,10 +64,10 @@ def show_pdf(file_path:str):
     pdf_display = f'<embed src="data:application/pdf;base64,{base64_pdf}" width="100%" height="1000" type="application/pdf">'
     st.markdown(pdf_display, unsafe_allow_html=True)
 
-uploaded_file = st.file_uploader("Upload PDF", type="pdf")
+    st.title("PDF file uplodaer")
+    uploaded_file = st.file_uploader("Choose your .pdf file", type="pdf")
 
-# Convert PDF to JPG
-if uploaded_file is not None:
+    if uploaded_file is not None:
         # Make temp file path from uploaded file
         with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
             st.markdown("## Original PDF file")
@@ -75,26 +75,18 @@ if uploaded_file is not None:
             fp.write_bytes(uploaded_file.getvalue())
             st.write(show_pdf(tmp_file.name))
 
-            imgs = convert_from_path(tmp_file.name,500, poppler_path=r'poppler/bin')
+            imgs = convert_from_path(tmp_file.name)
 
             st.markdown(f"Converted images from PDF")
             st.image(imgs)
 
+        st.stop()
 
-else:
-    st.info(
-        f"""
-            👆 Upload a .csv file first. Sample to try: [biostats.csv](https://people.sc.fsu.edu/~jburkardt/data/csv/biostats.csv)
-            """
-    )
-
-    st.stop()
-
-def pdf_checker(question_):
-    nlp = pipeline(
-        "document-question-answering",
-        model="impira/layoutlm-document-qa",
-    )
+    def pdf_checker(question_):
+        nlp = pipeline(
+            "document-question-answering",
+            model="impira/layoutlm-document-qa",
+        )
 
     result = nlp(
         "page.jpg",
