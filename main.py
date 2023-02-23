@@ -88,7 +88,7 @@ def show_pdf(file_path:str):
             model="impira/layoutlm-document-qa",
         )
 
-    result = nlp(
+    '''result = nlp(
         "page.jpg",
         question_
     )
@@ -103,7 +103,7 @@ with form:
 
 if submitted:
 
-    answer = pdf_checker(question_)
+    answer = pdf_checker(question_)'''
 
 
 c29, c30, c31 = st.columns([1, 1, 2])
