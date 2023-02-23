@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from functionforDownloadButtons import download_button
-from pdf2image import convert_from_path
+from pdf2image import convert_from_bytes
 import pytesseract
 
 from transformers import pipeline
@@ -45,7 +45,7 @@ with c2:
 uploaded_file = st.file_uploader('Choose your .pdf file', type="pdf")
 
 if uploaded_file is not None:
-    image_ = convert_from_path(uploaded_file, 500, poppler_path=r'poppler/bin')
+    image_ = convert_from_bytes(uploaded_file.read(), 500, poppler_path=r'poppler/bin')
     image_[0].save('page' + '.jpg', 'JPEG')
     uploaded_file.seek(0)
 
