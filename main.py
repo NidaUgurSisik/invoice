@@ -48,11 +48,11 @@ with c2:
 pdf_file = st.file_uploader("Upload PDF", type="pdf")
 
 # Convert PDF to JPG
-if uploaded_file is not None:
-    image_ = convert_from_path(uploaded_file)
+if pdf_file is not None:
+    image_ = convert_from_path(pdf_file)
     image_[0].save('page' + '.jpg', 'JPEG')
-    uploaded_file.seek(0)
-    
+    pdf_file.seek(0)
+
 
 else:
     st.info(
