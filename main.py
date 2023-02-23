@@ -44,11 +44,14 @@ with c2:
 
 uploaded_file = st.file_uploader('Choose your .pdf file', type="pdf")
 
+uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
+
 if uploaded_file is not None:
-    images = pdf2image.convert_from_bytes(uploaded_file.read())
-    for page in images:
-            st.image(page, use_column_width=True)
-    uploaded_file.seek(0)
+    # Convert first page of PDF to PIL image
+    image = pdf2image.convert_from_bytes(uploaded_file.read())[0]
+    
+    # Display PIL image using Streamlit
+    st.image(image, caption="Converted image", use_column_width=True)
 
 else:
     st.info(
