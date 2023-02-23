@@ -7,3 +7,4 @@ torch
 pytesseract
 tesseract
 pypdf2
+pypdfium2 
