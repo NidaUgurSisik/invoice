@@ -66,12 +66,7 @@ def image_checker(question_):
 
     return (df)
 
-import os
-
-filenames = os.listdir('.Tesseract-OCR')
-selected_filename = st.selectbox('Select a file', filenames)
-
-#pytesseract.pytesseract.tesseract_cmd = r"D:\Program Files (x86)\Tesseract-OCR\tesseract.exe"
+pytesseract.pytesseract.tesseract_cmd = pytesseract.__path__
 
 form = st.form(key="annotation")
 with form:
