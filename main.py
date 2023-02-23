@@ -1,9 +1,9 @@
 import streamlit as st
 import pandas as pd
 from functionforDownloadButtons import download_button
-import pdf2image
 from pdf2image import convert_from_path
 import pytesseract
+
 from transformers import pipeline
 from pdf2image.exceptions import (
     PDFInfoNotInstalledError,
@@ -41,14 +41,13 @@ with c2:
             "images/logo.png",
             width=200,
         )
-uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
+
+uploaded_file = st.file_uploader('Choose your .pdf file', type="pdf")
 
 if uploaded_file is not None:
-    # Convert first page of PDF to PIL image
-    image = pdf2image.convert_from_bytes(uploaded_file.read())[0]
-    
-    # Display PIL image using Streamlit
-    st.image(image, caption="Converted image", use_column_width=True)
+    image_ = convert_from_path(uploaded_file, 500, poppler_path=r'poppler/bin')
+    image_[0].save('page' + '.jpg', 'JPEG')
+    uploaded_file.seek(0)
 
 else:
     st.info(
@@ -66,14 +65,14 @@ def pdf_checker(question_):
     )
 
     result = nlp(
-        outputpath,
+        "page.jpg",
         question_
     )
     return (result)
 
 form = st.form(key="annotation")
 with form:
-    question_ = st.text_input('enter your text here')
+    question_ = st.text_input()
 
     submitted = st.form_submit_button(label="Submit")
 
