@@ -4,6 +4,7 @@ from functionforDownloadButtons import download_button
 from pdf2image import convert_from_path
 import pytesseract
 from pdf2jpg import pdf2jpg
+import pypdfium2 as pdfium
 from transformers import pipeline
 from pdf2image.exceptions import (
     PDFInfoNotInstalledError,
@@ -45,7 +46,7 @@ with c2:
 uploaded_file = st.file_uploader('Choose your .pdf file', type="pdf")
 
 if uploaded_file is not None:
-    import pypdfium2 as pdfium
+    
 
     pdf = pdfium.PdfDocument(uploaded_file)
     n_pages = len(pdf)
