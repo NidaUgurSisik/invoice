@@ -103,10 +103,10 @@ with form:
 
 if submitted:
 
-    answer = pdf_checker(question_)'''
+    answer = pdf_checker(question_)
 
 
 c29, c30, c31 = st.columns([1, 1, 2])
 
 with c29:
-    st.write(answer)
+    st.write(answer)'''
