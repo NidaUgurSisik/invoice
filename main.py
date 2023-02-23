@@ -66,7 +66,7 @@ def pdf_checker(question_):
     )
 
     result = nlp(
-        result_img,
+        outputpath,
         question_
     )
     return (result)
