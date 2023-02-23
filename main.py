@@ -48,6 +48,7 @@ if uploaded_file is not None:
     outputpath = r""
     result_img = pdf2jpg.convert_pdf2jpg(uploaded_file,outputpath, pages="ALL")
     #result.save('page' + '.jpg', 'JPEG')
+    print(result_img)
     uploaded_file.seek(0)
 
 else:
