@@ -1,10 +1,9 @@
 import streamlit as st
 import pandas as pd
 from functionforDownloadButtons import download_button
+import pdf2image
 from pdf2image import convert_from_path
 import pytesseract
-from pdf2jpg import pdf2jpg
-import pypdfium2 as pdfium
 from transformers import pipeline
 from pdf2image.exceptions import (
     PDFInfoNotInstalledError,
@@ -46,22 +45,9 @@ with c2:
 uploaded_file = st.file_uploader('Choose your .pdf file', type="pdf")
 
 if uploaded_file is not None:
-    
-
-    pdf = pdfium.PdfDocument(uploaded_file)
-    n_pages = len(pdf)
-    for page_number in range(n_pages):
-        page = pdf.get_page(page_number)
-        pil_image = page.render_topil(
-            scale=1,
-            rotation=0,
-            crop=(0, 0, 0, 0),
-            colour=(255, 255, 255, 255),
-            annotations=True,
-            greyscale=False,
-            optimise_mode=pdfium.OptimiseMode.NONE,
-        )
-        x = pil_image.save(f"image_{page_number+1}.png")
+    images = pdf2image.convert_from_bytes(imagem_referencia.read())
+    print(result_img)
+    uploaded_file.seek(0)
 
 else:
     st.info(
@@ -79,7 +65,7 @@ def pdf_checker(question_):
     )
 
     result = nlp(
-        x,
+        outputpath,
         question_
     )
     return (result)
